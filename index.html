@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Bidi Don ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fad0c4, #dbeaff, #e0c3fc);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            font-family: 'Nunito', sans-serif;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevents scrolling when button moves */
+            cursor: url('https://cur.cursors-4u.net/cursors/cur-2/cur117.cur'), auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Responsive Container: Works on Laptop & Mobile */
+        .container {
+            text-align: center; background: rgba(255, 255, 255, 0.90);
+            backdrop-filter: blur(8px);
+            padding: 20px; border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 4px solid #fff;
+            width: 90%; 
+            max-width: 450px; /* Keeps it looking like an App on Laptops */
+            min-height: 600px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10; margin: 20px auto;
+            position: relative;
+        }
+
+        /* Floating Background Objects */
+        .bg-objects-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .bg-object { position: absolute; bottom: -50px; font-size: 24px; opacity: 0.6; animation: floatUp linear infinite; }
+        @keyframes floatUp { 
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 0; } 
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; } 
+        }
+
+        /* Visual Effects */
+        .sparkle { position: absolute; width: 6px; height: 6px; border-radius: 50%; background-color: #ff4757; pointer-events: none; z-index: 9999; animation: sparkleAnim 0.8s linear forwards; }
+        @keyframes sparkleAnim { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0) translate(10px, 10px); opacity: 0; } }
+
+        .click-heart { position: absolute; pointer-events: none; color: #ff4757; font-size: 24px; animation: floatAndFade 1s ease-out forwards; z-index: 9999; text-shadow: 0 0 5px rgba(255, 71, 87, 0.5); }
+        @keyframes floatAndFade { 0% { transform: scale(0.5) translateY(0); opacity: 1; } 100% { transform: scale(1.5) translateY(-60px); opacity: 0; } }
+
+        /* UI Elements */
+        .doraemon-img { width: 140px; height: 140px; border-radius: 50%; border: 5px solid #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: cover; margin-bottom: 10px; background-color: #e6f7ff; animation: floatImage 3s ease-in-out infinite; }
+        @keyframes floatImage { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .cute-title { font-family: 'Fredoka One', cursive; font-size: 2rem; color: #0096e1; margin-bottom: 10px; text-shadow: 2px 2px 0 #bce0fd; }
+        .cute-subtitle { font-family: 'Nunito', sans-serif; font-size: 1.1rem; color: #ff4757; font-weight: bold; margin-bottom: 20px; }
+        .game-title { font-family: 'Fredoka One'; color: #0096e1; margin-bottom: 15px; font-size: 1.5rem; }
+        
+        .next-btn { background: linear-gradient(45deg, #0096e1, #00d2ff); color: white; padding: 12px 35px; border: none; border-radius: 50px; font-size: 1.1rem; font-family: 'Fredoka One', cursive; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 150, 225, 0.4); transition: transform 0.2s, box-shadow 0.2s; user-select: none; }
+        .next-btn:active { transform: scale(0.95); }
+
+        /* Sections */
+        #start-section, #quiz-section, #envelope-section, #proposal-section, #success-message, #sad-message, #surprise-section { display: none; width: 100%; flex-direction: column; align-items: center; }
+        #start-section { display: flex; animation: fadeIn 1s; }
+
+        #surprise-section { animation: popIn 0.5s; }
+        .surprise-icons { font-size: 5rem; margin-bottom: 20px; animation: bounce 2s infinite; }
+
+        /* Door Animation */
+        #door-section { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; perspective: 1000px; position: absolute; top: 0; left: 0; z-index: 500; }
+        .door-frame { width: 180px; height: 280px; background: #cd84f1; padding: 8px; border-radius: 10px; border: 3px solid #333; box-shadow: 0 15px 30px rgba(0,0,0,0.3); position: relative; }
+        .door { width: 100%; height: 100%; background: #ffcccc; border: 2px solid #333; border-radius: 5px; transform-origin: left; transition: transform 1.5s ease-in-out; position: relative; display: flex; align-items: center; justify-content: flex-end; z-index: 2; }
+        .door-handle { width: 15px; height: 15px; background: #f1c40f; border-radius: 50%; border: 2px solid #333; margin-right: 15px; }
+        .door-light { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: white; box-shadow: 0 0 50px white; z-index: 1; opacity: 0; transition: opacity 1s; }
+        .door-open { transform: rotateY(-110deg); }
+        .light-on { opacity: 1; }
+
+        #boy-rose-img { position: absolute; bottom: 0; left: 20px; width: 140px; z-index: 5; opacity: 0; transform: translateY(20px); transition: all 1s ease; }
+        .boy-visible { opacity: 1 !important; transform: translateY(-10px) !important; }
+        
+        #ready-popup { display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); border: 3px solid #ff4757; z-index: 600; text-align: center; width: 250px; animation: popIn 0.5s; }
+
+        /* Games */
+        #memory-game { display: none; width: 100%; }
+        .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 10px; justify-content: center; }
+        .memory-card { width: 70px; height: 70px; background: #0096e1; border-radius: 10px; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 2rem; color: white; transition: transform 0.3s; -webkit-tap-highlight-color: transparent; }
+        .memory-card.flipped { background: #fff; border: 2px solid #0096e1; transform: rotateY(180deg); }
+
+        #catcher-game { display: none; width: 100%; height: 350px; position: relative; overflow: hidden; border: 2px dashed #b3d7ff; border-radius: 15px; background: #f0f8ff; touch-action: none; }
+        .falling-item { position: absolute; font-size: 35px; cursor: pointer; user-select: none; top: -50px; z-index: 100; animation: fall 3s linear forwards; }
+        @keyframes fall { 0% { top: -50px; } 100% { top: 350px; } }
+        .score-board { font-family: 'Fredoka One'; font-size: 1.2rem; color: #ff4757; margin-bottom: 10px; }
+
+        /* Quiz */
+        .progress { color: #0096e1; font-weight: 800; font-size: 0.9rem; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .question-text { font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: #333; margin-bottom: 5px; line-height: 1.3; }
+        .comment-text { font-size: 1rem; color: #ff4757; font-style: italic; margin-bottom: 20px; font-weight: bold; min-height: 40px; }
+        input[type="text"] { width: 85%; padding: 12px; border: 2px solid #b3d7ff; border-radius: 25px; font-size: 1rem; margin-bottom: 20px; outline: none; text-align: center; background: #f0f8ff; }
+
+        /* Letter */
+        #transition-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; border-radius: 20px; color: white; font-family: 'Fredoka One'; font-size: 2rem; animation: fadeIn 0.5s; }
+        .envelope-wrapper { position: relative; cursor: pointer; transition: transform 0.3s; }
+        .envelope-wrapper:hover { transform: scale(1.05); }
+        .envelope { width: 200px; height: 140px; background: #ff4757; position: relative; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); z-index: 10; }
+        .envelope::before { content: ''; position: absolute; top: 0; left: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-top: 80px solid #ff6b81; transform-origin: top; transition: 0.5s; z-index: 20; }
+        .envelope.open::before { transform: rotateX(180deg); z-index: 1; }
+        .envelope::after { content: ''; position: absolute; bottom: 0; left: 0; border-left: 100px solid transparent; border-right: 100px solid transparent; border-bottom: 90px solid #ff4757; z-index: 15; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+        .letter { position: absolute; top: 10px; left: 20px; width: 160px; height: 100px; background: white; z-index: 5; transition: 0.5s; display: flex; justify-content: center; align-items: center; font-size: 2rem; }
+        .envelope.open .letter { top: -80px; z-index: 12; }
+        .tear-text { margin-top: 20px; font-weight: bold; color: #ff4757; animation: bounce 1s infinite; }
+
+        /* Proposal */
+        #proposal-section { display: none; width: 100%; animation: popIn 0.8s; }
+        .big-heart { font-size: 4rem; color: #ff4757; animation: beat 1s infinite; margin-bottom: 10px; }
+        .proposal-text { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: #d63031; margin-bottom: 30px; }
+        .buttons { display: flex; justify-content: center; gap: 20px; height: 60px; position: relative; }
+        button.choice-btn { padding: 12px 30px; font-size: 1.2rem; border: none; border-radius: 50px; cursor: pointer; font-family: 'Fredoka One', cursive; }
+        #yesBtn { background-color: #ff4757; color: white; box-shadow: 0 5px 0 #c0392b; z-index: 100; }
+        
+        /* FIX: Robust No Button - Stays Visible */
+        #noBtn { 
+            background-color: #dfe6e9; color: #2d3436; 
+            box-shadow: 0 5px 0 #b2bec3; position: absolute; 
+            z-index: 999999; 
+            transition: all 0.15s ease;
+        }
+
+        #sad-message { font-size: 1.5rem; color: #ff4757; font-weight: bold; margin-top: 20px; }
+
+        /* Final & Promise */
+        .final-text { font-size: 1rem; line-height: 1.6; color: #444; background: #fff0f3; padding: 20px; border-radius: 15px; border: 2px dashed #ff4757; margin-bottom: 20px; text-align: left; white-space: pre-line; }
+        .whatsapp-btn { background-color: #25D366; color: white; text-decoration: none; padding: 12px 25px; border-radius: 25px; display: inline-block; font-weight: bold; box-shadow: 0 4px 0 #128C7E; font-family: 'Fredoka One', cursive; }
+        .promise-card { background: #fff; border: 2px solid #0096e1; border-radius: 15px; padding: 15px; margin: 20px 0; text-align: left; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 90%; }
+        .promise-title { font-family: 'Fredoka One', cursive; color: #0096e1; font-size: 1.1rem; text-align: center; margin-bottom: 10px; text-decoration: underline; }
+        .checklist-item { font-size: 0.95rem; margin-bottom: 8px; color: #444; }
+
+        /* Bell & Music Controls */
+        .secret-bell { position: fixed; bottom: 20px; right: 20px; font-size: 30px; cursor: pointer; z-index: 100; background: white; border-radius: 50%; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border: 2px solid #f1c40f; transition: transform 0.2s; }
+        .secret-bell:hover { transform: scale(1.1) rotate(20deg); }
+        .bell-popup { display: none; position: fixed; bottom: 80px; right: 20px; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); border: 2px solid #0096e1; font-family: 'Fredoka One'; color: #0096e1; z-index: 101; max-width: 200px; animation: popIn 0.3s; }
+        
+        .music-btn { position: fixed; top: 20px; right: 20px; background: white; border: 2px solid #0096e1; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes popIn { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-objects-container" id="bg-objects-container"></div>
+    
+    <div class="secret-bell" onclick="ringBell()">🔔</div>
+    <div class="bell-popup" id="bell-popup"></div>
+
+    <div class="music-btn" onclick="toggleMusic()">🎵</div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/audio/2022/03/10/audio_5f2b800473.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="newWinSound" src="https://cdn.pixabay.com/audio/2022/03/24/audio_34b9777927.mp3" preload="auto"></audio> <audio id="newAlertSound" src="https://cdn.pixabay.com/audio/2021/08/09/audio_03e04c27aa.mp3" preload="auto"></audio> <audio id="newClickSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3" preload="auto"></audio> <div class="container">
+        
+        <div id="start-section">
+            <img class="doraemon-img" src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" alt="Doraemon">
+            <div class="cute-title">Hello Bidi! 👋</div>
+            <div class="cute-subtitle">Warning: You might fall in love... 😉<br>Step inside... 👉👈</div>
+            <button class="next-btn" onclick="startInitialDoorAnimation()">Start Adventure ❤️</button>
+        </div>
+
+        <div id="door-section">
+            <h2 id="door-title" style="color:#0096e1; font-family:'Fredoka One'; margin-bottom:20px;">Open Sesame!</h2>
+            <div class="door-frame">
+                <div class="door-light"></div>
+                <div class="door" id="magicDoor"><div class="door-handle"></div></div>
+                <img id="boy-rose-img" src="https://media.tenor.com/2n2Wv6G7nckAAAAi/rose-love.gif" alt="Boy with Rose">
+            </div>
+            
+            <div id="ready-popup">
+                <div style="font-size:1.2rem; color:#ff4757; margin-bottom:10px;">Since it's Rose Day...<br>Here is a rose for you! 🌹</div>
+                <div style="font-size:1rem; margin-bottom:15px; color:#555;">Are you ready to enter?</div>
+                <button class="next-btn" onclick="enterGame()">YES, I'm Ready! ❤️</button>
+            </div>
+        </div>
+
+        <div id="memory-game">
+            <div class="game-title">Level: Memory Match 🧠</div>
+            <p>Find all the matching gadgets!</p>
+            <div class="memory-grid" id="memoryGrid"></div>
+        </div>
+
+        <div id="catcher-game">
+            <div style="padding: 10px;">
+                <div class="game-title">Level: Catch Dorayaki 🍩</div>
+                <div class="score-board">Score: <span id="score">0</span>/10</div>
+                <p>Tap the Dorayakis quickly!</p>
+            </div>
+        </div>
+
+        <div id="quiz-section">
+            <div style="position: relative; display: inline-block;">
+                <img class="doraemon-img" src="https://upload.wikimedia.org/wikipedia/en/b/bd/Doraemon_character.png" alt="Doraemon">
+                <div id="emoji-overlay" style="position: absolute; bottom: 10px; right: -10px; font-size: 40px;">🤔</div>
+            </div>
+            <div class="progress" id="progress-text">Question 1 of 23</div>
+            <div class="question-text" id="question-label">Loading...</div>
+            <div class="comment-text" id="comment-label">Loading...</div>
+            <input type="text" id="answer-input" placeholder="Type answer here..." autocomplete="off">
+            <br>
+            <button class="next-btn" onclick="nextQuestion()">Next ➜</button>
+        </div>
+
+        <div id="surprise-section">
+            <div class="surprise-icons">🧸 🍫</div>
+            <div class="cute-title" style="font-size:1.8rem;">Halfway There!</div>
+            <div class="cute-subtitle">
+                You are doing great! <br>
+                Here is a <strong>Teddy & Chocolate</strong> <br>
+                (Because you are sweeter than both!) ❤️
+            </div>
+            <button class="next-btn" onclick="resumeQuiz()">Take it & Continue ➜</button>
+        </div>
+
+        <div id="transition-overlay">
+            <p id="transition-text">Now answer me<br>HONESTLY... 🤫</p>
+        </div>
+
+        <div id="envelope-section">
+            <div class="envelope-wrapper" onclick="openEnvelope()">
+                <div class="envelope" id="envelope"><div class="letter">❤️</div></div>
+            </div>
+            <div class="tear-text">Tap to Open</div>
+        </div>
+
+        <div id="proposal-section">
+            <div class="big-heart">💖</div>
+            <div class="proposal-text">Will You be my<br>Valentine?</div>
+            <div class="buttons">
+                <button id="yesBtn" class="choice-btn" onclick="handleYes()">YES! ❤️</button>
+                <button id="noBtn" class="choice-btn" style="left: 60%;" onmouseover="moveButton()" ontouchstart="moveButton()" onclick="handleNo()">NO 💔</button>
+            </div>
+        </div>
+
+        <div id="sad-message">
+            Bohut dukh hua...<br>Koi nahi phir try karunga 💔
+            <br><br>
+            <button class="next-btn" onclick="triggerFinalDoor('No')">Click here to next ➜</button>
+        </div>
+
+        <div id="success-message">
+            <div class="big-heart">🥰</div>
+            <h2 style="color: #ff4757; font-family: 'Fredoka One', cursive;">Haha, I knew it! ❤️</h2>
+            
+            <div class="final-text">
+                Haha, I knew it! I hope you liked it. Maybe I’m bothering you, but let’s be real... I’m sure no one else did it like this. 😉
+                <br><br>
+                Shayad abhi tak aap jaisi <strong>unromantic ladki</strong> gussa ho gayi hogi aur hathoda leke mujhe maarna chahti hogi 🔨... fikar not, isliye online bheja! 🏃‍♂️💨
+                <br><br>
+                Just so you know, even if I’m crossing a line, I’m <strong>not</strong> apologizing today. You’ll just have to deal with it! 😤💖
+                <br><br>
+                So listen, <strong>Bidi Don</strong>—study hard, make yourself proud, and become an <strong>IAS officer</strong>. You really can do it. 📚✨
+                <br><br>
+                Now keep smiling, because your smile is honestly the cutest. 🥹🥰
+                <br><br>
+                <strong>Mere kya... aapke peeche-peeche aa jaunga. 🚶‍♂️❤️</strong>
+            </div>
+
+            <div class="promise-card">
+                <div class="promise-title">Official Promise to Bidi Don 📜</div>
+                <div class="checklist-item">✅ Be your Valentine (Obviously)</div>
+                <div class="checklist-item">✅ Never disturb you while studying 📚</div>
+                <div class="checklist-item">✅ Bring you chai/coffee when tired ☕</div>
+                <div class="checklist-item">✅ Be the loudest clapper when you become an IAS 🇮🇳</div>
+            </div>
+
+            <a id="waLink" class="whatsapp-btn" href="#" target="_blank">Send Answers & Say Hi</a>
+        </div>
+
+    </div>
+
+    <script>
+        // --- MUSIC LOGIC ---
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.volume = 0.5;
+        let isMusicPlaying = false;
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                document.querySelector('.music-btn').innerText = "🔇";
+            } else {
+                bgMusic.play();
+                isMusicPlaying = true;
+                document.querySelector('.music-btn').innerText = "🎵";
+            }
+        }
+
+        // --- SOUND EFFECTS ---
+        const newWinSound = document.getElementById('newWinSound'); // Chime
+        const newAlertSound = document.getElementById('newAlertSound'); // Ding
+        const newClickSound = document.getElementById('newClickSound'); // Pop
+        newWinSound.volume = 0.6; newAlertSound.volume = 0.6; newClickSound.volume = 0.5;
+
+        // Wake up audio engine
+        let audioUnlocked = false;
+        function wakeUpAudio() {
+            if (!audioUnlocked) {
+                // Force play music (background)
+                bgMusic.play().then(() => { 
+                    isMusicPlaying = true; 
+                    document.querySelector('.music-btn').innerText = "🎵"; 
+                }).catch(()=>{});
+                
+                // Muted play of FX to unlock them
+                newWinSound.play().then(() => { newWinSound.pause(); newWinSound.currentTime=0; }).catch(()=>{});
+                newAlertSound.play().then(() => { newAlertSound.pause(); newAlertSound.currentTime=0; }).catch(()=>{});
+                newClickSound.play().then(() => { newClickSound.pause(); newClickSound.currentTime=0; }).catch(()=>{});
+                
+                audioUnlocked = true;
+            }
+        }
+        document.body.addEventListener('click', wakeUpAudio);
+        document.body.addEventListener('touchstart', wakeUpAudio);
+
+        // --- VISUAL EFFECTS ---
+        document.addEventListener('mousemove', function(e) {
+            if(Math.random() < 0.1) { 
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.left = e.pageX + 'px';
+                sparkle.style.top = e.pageY + 'px';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 800);
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            const heart = document.createElement('div');
+            heart.classList.add('click-heart');
+            heart.innerText = '❤️';
+            let x = e.pageX;
+            let y = e.pageY;
+            if(e.changedTouches && e.changedTouches.length > 0) {
+               x = e.changedTouches[0].pageX;
+               y = e.changedTouches[0].pageY;
+            }
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1000);
+        });
+
+        // --- BACKGROUND OBJECTS ---
+        const bgContainer = document.getElementById('bg-objects-container');
+        const objects = ['🚁', '🌹', '✨', '💖'];
+        setInterval(() => {
+            const obj = document.createElement('div');
+            obj.classList.add('bg-object');
+            obj.innerText = objects[Math.floor(Math.random() * objects.length)];
+            obj.style.left = Math.random() * 100 + 'vw';
+            obj.style.animationDuration = (Math.random() * 5 + 5) + 's';
+            bgContainer.appendChild(obj);
+            setTimeout(() => obj.remove(), 10000);
+        }, 1500);
+
+        // --- GAME LOGIC ---
+        const quizData = [
+            { q: "What name have you saved for me in your phone?", c: "(If it's just my name, I'm going to cry... 🥺)", e: "📱" },
+            { q: "What’s your favorite food?", c: "(So I know what to bribe you with 🍔)", e: "😋" },
+            { q: "Who is your favorite singer?", c: "(Apart from Armaan Malik... I know he's your fav! 😉)", e: "🎤" },
+            { q: "What’s your favorite song right now?", c: "(Is it romantic? Or are you a rockstar? 🎸)", e: "🎧" },
+            { q: "What’s your dream vacation spot?", c: "(Packing my bags already... ✈️)", e: "🏖️" },
+            { q: "What’s your favorite color?", c: "(I bet you look amazing in it ❤️)", e: "🎨" },
+            { q: "What’s your favorite flower?", c: "(Since it's Feb 7th... I brought you a Rose! 🌹)", e: "🌹" },
+            { q: "Coffee or Tea?", c: "(I make both perfectly. Just saying. ☕)", e: "☕" },
+            { q: "What’s your favorite dessert?", c: "(Besides me? 😉 Just kidding! ...Unless?)", e: "🍰" },
+            { q: "What’s your favorite season?", c: "(I like winter... good excuse to hug ❄️)", e: "🌨️" },
+            { q: "What’s your favorite movie?", c: "(Netflix and chill? 👀)", e: "🍿" },
+            { q: "Beach or Mountains?", c: "(I'll follow you to either ⛰️)", e: "🌄" },
+            { q: "What’s your favorite ice cream flavor?", c: "(I promise not to steal a bite... maybe.)", e: "🍦" },
+            { q: "What is your all-time favorite song?", c: "(I might serenade you with this one day... be warned 😜)", e: "🎤" },
+            { q: "What song reminds you of me?", c: "(It better be a good song! 😤)", e: "🎶" },
+            { q: "What’s your favorite thing about me?", c: "(I know the list is long, but try to pick just one 😉)", e: "😎" },
+            { q: "What’s your favorite hobby?", c: "(I'll join you, even if I'm bad at it.)", e: "🏸" },
+            { q: "What’s your favorite animal?", c: "(You're still cuter though. 🐶)", e: "🐼" },
+            { q: "What’s your favorite time of day?", c: "(My fav time is whenever I talk to you.)", e: "⏰" },
+            { q: "What’s your favorite outfit of mine?", c: "(I need to look my best for you 👔)", e: "👕" },
+            { q: "What’s your favorite way to relax?", c: "(I know a good massage therapist... it's me. 💆‍♂️)", e: "🧘‍♀️" },
+            { q: "What is one wish you have?", c: "(Is it me? Say it's me. 😂)", e: "✨" },
+            { q: "Who is your favorite person?", c: "(If you don't say me, I'm crying. 😭)", e: "👀" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let attempts = 0;
+        const maxAttempts = 22;
+        let gameQueue = ['memory', 'catcher'];
+        gameQueue.sort(() => Math.random() - 0.5);
+
+        // --- DOM Elements ---
+        const startSection = document.getElementById('start-section');
+        const doorSection = document.getElementById('door-section');
+        const memoryGame = document.getElementById('memory-game');
+        const catcherGame = document.getElementById('catcher-game');
+        const quizSection = document.getElementById('quiz-section');
+        const surpriseSection = document.getElementById('surprise-section');
+        const transitionOverlay = document.getElementById('transition-overlay');
+        const envelopeSection = document.getElementById('envelope-section');
+        const proposalSection = document.getElementById('proposal-section');
+        const successMsg = document.getElementById('success-message');
+        const sadMsg = document.getElementById('sad-message');
+        const magicDoor = document.getElementById('magicDoor');
+        const doorTitle = document.getElementById('door-title');
+        const noBtn = document.getElementById('noBtn');
+        const boyRoseImg = document.getElementById('boy-rose-img');
+        const readyPopup = document.getElementById('ready-popup');
+
+        function ringBell() {
+            const popup = document.getElementById('bell-popup');
+            const bellMsgs = ["You are the best! 🔔", "Bidi Don Rocks! 😎", "Study hard for IAS! 📚", "Keep smiling! ✨"];
+            popup.innerText = bellMsgs[Math.floor(Math.random() * bellMsgs.length)];
+            popup.style.display = 'block'; 
+            newAlertSound.currentTime = 0; newAlertSound.play();
+            setTimeout(() => popup.style.display = 'none', 3000);
+        }
+
+        function startInitialDoorAnimation() {
+            // WAKE UP AUDIO HERE
+            wakeUpAudio();
+            
+            startSection.style.display = 'none';
+            doorTitle.innerText = "Entering Game...";
+            doorSection.style.display = 'flex';
+            magicDoor.classList.remove('door-open');
+            document.querySelector('.door-light').classList.remove('light-on');
+            boyRoseImg.classList.remove('boy-visible');
+            readyPopup.style.display = 'none';
+            setTimeout(() => {
+                magicDoor.classList.add('door-open');
+                document.querySelector('.door-light').classList.add('light-on');
+            }, 500);
+            setTimeout(() => {
+                boyRoseImg.classList.add('boy-visible');
+                setTimeout(() => { readyPopup.style.display = 'block'; }, 800);
+            }, 1500);
+        }
+
+        function enterGame() {
+            doorSection.style.display = 'none';
+            loadNextGame();
+        }
+
+        function loadNextGame() {
+            if (gameQueue.length > 0) {
+                const game = gameQueue.shift(); 
+                if (game === 'memory') {
+                    doorTitle.innerText = "Next Level: Memory";
+                    runDoorAnimation(() => { initMemoryGame(); });
+                } else {
+                    doorTitle.innerText = "Next Level: Catch";
+                    runDoorAnimation(() => { initCatcherGame(); });
+                }
+            } else {
+                doorTitle.innerText = "Final Level: The Quiz";
+                runDoorAnimation(() => { 
+                    quizSection.style.display = 'block'; 
+                    loadQuestion(0); 
+                });
+            }
+        }
+
+        function runDoorAnimation(callback) {
+            magicDoor.classList.remove('door-open'); 
+            document.querySelector('.door-light').classList.remove('light-on');
+            boyRoseImg.style.display = 'none';
+            readyPopup.style.display = 'none';
+            doorSection.style.display = 'flex';
+            setTimeout(() => { 
+                magicDoor.classList.add('door-open'); 
+                document.querySelector('.door-light').classList.add('light-on'); 
+            }, 500);
+            setTimeout(() => { 
+                doorSection.style.display = 'none'; 
+                callback(); 
+            }, 2500);
+        }
+
+        // --- Memory Game ---
+        const emojis = ['🐱', '🐱', '🍩', '🍩', '🔔', '🔔', '🚪', '🚪', '🚁', '🚁', '❤️', '❤️'];
+        let hasFlippedCard = false; let lockBoard = false; let firstCard, secondCard; let matchesFound = 0;
+
+        function initMemoryGame() {
+            memoryGame.style.display = 'block';
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = ''; matchesFound = 0; 
+            emojis.sort(() => 0.5 - Math.random());
+            emojis.forEach(emoji => {
+                const card = document.createElement('div');
+                card.classList.add('memory-card'); card.dataset.emoji = emoji;
+                card.addEventListener('click', flipCard);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard || this === firstCard) return;
+            // Play Pop Sound
+            newClickSound.currentTime=0; newClickSound.play().catch(()=>{});
+            
+            this.classList.add('flipped'); this.innerText = this.dataset.emoji;
+            if (!hasFlippedCard) { hasFlippedCard = true; firstCard = this; return; }
+            secondCard = this; checkForMatch();
+        }
+
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.emoji === secondCard.dataset.emoji;
+            isMatch ? disableCards() : unflipCards();
+        }
+
+        function disableCards() {
+            matchesFound++;
+            // Play Chime Sound on Match
+            newWinSound.currentTime=0; newWinSound.play().catch(()=>{});
+            
+            firstCard.removeEventListener('click', flipCard); secondCard.removeEventListener('click', flipCard);
+            resetBoard();
+            if (matchesFound === 6) {
+                setTimeout(() => { memoryGame.style.display = 'none'; loadNextGame(); }, 1000);
+            }
+        }
+
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flipped'); firstCard.innerText = '';
+                secondCard.classList.remove('flipped'); secondCard.innerText = '';
+                resetBoard();
+            }, 1000);
+        }
+        function resetBoard() { [hasFlippedCard, lockBoard] = [false, false]; [firstCard, secondCard] = [null, null]; }
+
+        // --- Catcher Game ---
+        let score = 0; let gameInterval;
+        function initCatcherGame() {
+            catcherGame.style.display = 'block';
+            score = 0; document.getElementById('score').innerText = score;
+            gameInterval = setInterval(spawnDorayaki, 700);
+        }
+
+        function spawnDorayaki() {
+            if (score >= 10) return;
+            const d = document.createElement('div'); 
+            d.innerText = '🍩'; 
+            d.classList.add('falling-item');
+            
+            // Responsive width calculation
+            const gameWidth = document.getElementById('catcher-game').offsetWidth;
+            d.style.left = Math.max(10, Math.random() * (gameWidth - 50)) + 'px';
+            
+            const catchIt = function() {
+                score++; 
+                // Play Ding Sound on Catch
+                newAlertSound.currentTime=0; newAlertSound.play().catch(()=>{});
+                
+                document.getElementById('score').innerText = score; 
+                d.remove();
+                if (score === 10) {
+                    clearInterval(gameInterval);
+                    document.querySelectorAll('.falling-item').forEach(e => e.remove());
+                    setTimeout(() => { catcherGame.style.display = 'none'; loadNextGame(); }, 500);
+                }
+            };
+            d.onmousedown = catchIt; d.ontouchstart = catchIt;
+            document.getElementById('catcher-game').appendChild(d);
+            setTimeout(() => { if(d.parentNode) d.remove(); }, 3000);
+        }
+
+        // --- Quiz ---
+        function loadQuestion(index) {
+            document.getElementById('question-label').innerText = quizData[index].q;
+            document.getElementById('comment-label').innerText = quizData[index].c;
+            document.getElementById('emoji-overlay').innerText = quizData[index].e;
+            document.getElementById('progress-text').innerText = "Question " + (index + 1) + " of " + quizData.length;
+        }
+
+        function nextQuestion() {
+            const input = document.getElementById('answer-input');
+            if (input.value.trim() === "") { alert("Please type something! 🥺"); return; }
+            answers.push("Q" + (currentQuestionIndex + 1) + ": " + input.value);
+            input.value = ""; 
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex === 10) {
+                quizSection.style.display = 'none';
+                surpriseSection.style.display = 'flex';
+                newAlertSound.play();
+                return; 
+            }
+
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion(currentQuestionIndex);
+            } else {
+                quizSection.style.display = 'none';
+                transitionOverlay.style.display = 'flex';
+                setTimeout(() => { transitionOverlay.style.display = 'none'; envelopeSection.style.display = 'flex'; }, 2000);
+            }
+        }
+
+        function resumeQuiz() {
+            surpriseSection.style.display = 'none';
+            quizSection.style.display = 'block';
+            loadQuestion(currentQuestionIndex);
+        }
+
+        // --- Letter ---
+        function openEnvelope() {
+            document.getElementById('envelope').classList.add('open');
+            setTimeout(() => { envelopeSection.style.display = 'none'; proposalSection.style.display = 'block'; }, 800);
+        }
+
+        // --- Robust Move Button Logic ---
+        function moveButton() {
+            if (attempts >= maxAttempts) return;
+            attempts++;
+            
+            if(noBtn.parentNode !== document.body) {
+                document.body.appendChild(noBtn);
+            }
+            noBtn.style.position = 'fixed'; 
+            
+            const btnW = noBtn.offsetWidth || 80;
+            const btnH = noBtn.offsetHeight || 40;
+            const winW = window.innerWidth;
+            const winH = window.innerHeight;
+            
+            const maxX = winW - btnW - 20;
+            const maxY = winH - btnH - 20;
+            
+            const randomX = Math.max(20, Math.random() * maxX);
+            const randomY = Math.max(20, Math.random() * maxY);
+            
+            noBtn.style.left = randomX + "px";
+            noBtn.style.top = randomY + "px";
+        }
+
+        function handleNo() {
+            if (attempts < maxAttempts) { moveButton(); return; }
+            
+            proposalSection.style.display = 'none'; 
+            sadMsg.style.display = 'block';
+            noBtn.style.display = 'none';
+        }
+
+        function handleYes() { 
+            noBtn.style.display = 'none';
+            triggerFinalDoor("Yes"); 
+        }
+
+        function triggerFinalDoor(response) {
+            noBtn.style.display = 'none';
+            sadMsg.style.display = 'none'; proposalSection.style.display = 'none';
+            doorTitle.innerText = "Opening Future...";
+            runDoorAnimation(() => { showFinalPage(response); });
+        }
+
+        function showFinalPage(response) {
+            successMsg.style.display = 'block';
+            document.body.style.background = "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)";
+            if (response === "Yes") { newWinSound.play(); launchConfetti(); } else { launchConfetti(); }
+            
+            // ⚠️ REPLACE THIS
+            const yourPhoneNumber = "0000000000"; 
+            let message = "Hey! Here are my Valentine answers:%0a%0a" + answers.join("%0a") + "%0a%0aAnd I said " + response + "! ❤️";
+            document.getElementById('waLink').href = "https://wa.me/" + yourPhoneNumber + "?text=" + message;
+        }
+
+        function launchConfetti() {
+            var duration = 5 * 1000; var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+              if (timeLeft <= 0) return clearInterval(interval);
+              var particleCount = 50 * (timeLeft / duration);
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
